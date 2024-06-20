@@ -1,22 +1,18 @@
 import { log } from 'console'
 import express from 'express'
-import userRouter from './user.router'
+import userRouter from './routers/users.routers'
+import databaseServier from './services/database.service'
 
 const app = express()
+app.use(express.json())
 const router = express.Router()
 const port = 3000
-
-// define the home page route
+databaseServier.connect()
 app.get('/', (req, res) => {
-  res.send('Birds home page')
+  res.send('home page')
 })
-// define the about route
 
 app.use('/api', userRouter)
-
-// app.get('/', function (req, res) {
-//   res.send('Hello World')
-// })
 
 app.listen(port, () => {
   console.log('listening on port 3000')

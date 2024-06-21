@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
+import { UserVerifyStatus } from '~/models/schemas/users.schema'
 import userService from '~/services/user.service'
 export const LoginController = (req: Request, res: Response) => {
   console.log(req.body)
@@ -11,10 +12,6 @@ export const LoginController = (req: Request, res: Response) => {
 export const registerController = async (req: Request, res: Response) => {
   const { name, email, date_of_birth, password } = req.body
 
-  if (!name || !email || !date_of_birth || !password) {
-    return res.status(400).json({ message: 'Missing required fields' })
-  }
-
   const user = {
     _id: new ObjectId(),
     name,
@@ -25,7 +22,7 @@ export const registerController = async (req: Request, res: Response) => {
     updated_at: new Date(),
     email_verify_token: '', // Token xác thực email sẽ được tạo sau
     forgot_password_token: '', // Token quên mật khẩu sẽ được tạo sau
-    verify: 0, // Unverified
+    verify: UserVerifyStatus.Unverified, // Unverified
     bio: '',
     location: '',
     website: '',

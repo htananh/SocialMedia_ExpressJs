@@ -4,5 +4,5 @@ import { RegisterValidator, validate } from '~/middlewares/users.middlewares'
 const userRouter = Router()
 
 // userRouter.get('/login', userSchema, validate, LoginController)
-userRouter.get('/register', RegisterValidator, validate, registerController)
+userRouter.post('/register', RegisterValidator, validate, registerController)
 export default userRouter

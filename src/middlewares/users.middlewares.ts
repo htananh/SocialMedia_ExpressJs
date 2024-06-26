@@ -1,7 +1,9 @@
-import { Request, Response, NextFunction } from 'express'
+import e, { Request, Response, NextFunction } from 'express'
 import { checkSchema, validationResult } from 'express-validator'
-import databaseService from '~/services/database.service'
 import userService from '~/services/user.service'
+import { CustomError } from '~/models/customErrors'
+import HttpStatus from '~/constants/HttpStatus'
+import { ValidationEntiryError } from '~/models/customErrors'
 export const RegisterValidator = checkSchema({
   name: {
     in: ['body'],
@@ -46,8 +48,18 @@ export const RegisterValidator = checkSchema({
 
 export const validate = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req)
+  const errorObj = errors.mapped()
+  const validateEntiryError = new ValidationEntiryError({ errors: {} })
+  for (const key in errorObj) {
+    const msg = errorObj[key].msg
+    if (msg instanceof CustomError && msg.status !== HttpStatus.UNPROCESSABLE_ENTITY) {
+      console.log({ errors: { [key]: msg.message } })
+      return next(msg)
+    }
+    validateEntiryError.errors[key] = errorObj[key]
+  }
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() })
+    return next(validateEntiryError)
   }
   next()
 }

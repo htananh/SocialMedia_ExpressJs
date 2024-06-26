@@ -25,7 +25,7 @@ class UserService {
         date_of_birth: new Date(payload.date_of_birth),
         password: hashPassword(payload.password),
         created_at: new Date(),
-        updated_at: new Date(),
+        updated_at: new Date()
       })
     )
     const user_id = result.insertedId.toString()

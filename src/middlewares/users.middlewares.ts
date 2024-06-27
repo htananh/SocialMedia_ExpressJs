@@ -4,6 +4,22 @@ import userService from '~/services/user.service'
 import { CustomError } from '~/models/customErrors'
 import HttpStatus from '~/constants/HttpStatus'
 import { ValidationEntiryError } from '~/models/customErrors'
+export const LoginValidator = checkSchema({
+  email: {
+    in: ['body'],
+    isEmail: {
+      errorMessage: 'Email is invalid'
+    },
+    normalizeEmail: true
+  },
+  password: {
+    in: ['body'],
+    isLength: {
+      errorMessage: 'Password must be at least 6 characters long',
+      options: { min: 6 }
+    }
+  }
+})
 export const RegisterValidator = checkSchema({
   name: {
     in: ['body'],
@@ -22,7 +38,7 @@ export const RegisterValidator = checkSchema({
     },
     custom: {
       options: async (value) => {
-        const isEmailExists = await userService.checkEmailExists(value)
+        const isEmailExists = await userService.findbyEmail(value)
         if (isEmailExists) {
           throw new Error('Email already exists')
         }
@@ -33,7 +49,7 @@ export const RegisterValidator = checkSchema({
   date_of_birth: {
     in: ['body'],
     isISO8601: {
-      errorMessage: 'Date of birth is invalid'
+      errorMessage: 'Date of birth is invalid must be isISO8601'
     },
     toDate: true
   },

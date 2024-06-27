@@ -1,11 +1,9 @@
 import { Collection, Db, MongoClient, ServerApiVersion } from 'mongodb'
 import dotenv from 'dotenv'
 import User from '~/models/schemas/users.schema'
+import refreshToken from '~/models/schemas/refrestToken.schema'
 
 dotenv.config()
-console.log('MONGODB_USER:', process.env.MONGODB_USER);
-console.log('MONGODB_PASS:', process.env.MONGODB_PASS);
-console.log('MONGODB_DATABASE:', process.env.MONGODB_DATABASE);
 
 const uri = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@socialmedial.m3vl34w.mongodb.net/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority&appName=SocialMedial`
 
@@ -35,6 +33,9 @@ class DatabaseService {
   }
   get users(): Collection<User> {
     return this.db.collection('users')
+  }
+  get refreshTokens(): Collection<refreshToken>{
+    return this.db.collection('refreshTokens')
   }
 }
 

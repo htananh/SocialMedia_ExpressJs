@@ -68,8 +68,6 @@ class UserService {
     return { access_token, refresh_token }
   }
   async logout(refresh_token: string) {
-    verifyToken(refresh_token, process.env.REFRESH_TOKEN_SECRET as string)
-    console.log('refresh_token', refresh_token)
     const result = await databaseService.refreshTokens.deleteOne({ refresh_token })
     if (result.deletedCount === 0) {
       throw new CustomError('Invalid refresh token', HttpStatus.BAD_REQUEST)

@@ -3,10 +3,13 @@ import databaseService from './database.service'
 import { registerUser } from '~/models/requests/user.request'
 import User from '~/models/schemas/users.schema'
 import { hashPassword, comparePassword } from '~/utils/cryto'
-import { generateAccesToken, generateRefreshToken } from '~/utils/jwt'
+import { generateAccesToken, generateRefreshToken, verifyToken } from '~/utils/jwt'
 import { Token_Type } from '~/constants/enum'
 import { CustomError, ValidationEntiryError } from '~/models/customErrors'
 import refreshToken from '~/models/schemas/refrestToken.schema'
+import dotenv from 'dotenv'
+import HttpStatus from '~/constants/HttpStatus'
+dotenv.config()
 class UserService {
   private signAccessToken(user_id: string) {
     return generateAccesToken({
@@ -64,9 +67,25 @@ class UserService {
     )
     return { access_token, refresh_token }
   }
+  async logout(refresh_token: string) {
+    verifyToken(refresh_token, process.env.REFRESH_TOKEN_SECRET as string)
+    console.log('refresh_token', refresh_token)
+    const result = await databaseService.refreshTokens.deleteOne({ refresh_token })
+    if (result.deletedCount === 0) {
+      throw new CustomError('Invalid refresh token', HttpStatus.BAD_REQUEST)
+    }
+    console.log('result', result)
+    return Boolean(result)
+  }
   async findbyEmail(email: string) {
     const result = await databaseService.users.findOne({ email })
     return Boolean(result)
+  }
+  async findRefreshToken(refresh_token: string) {
+    return await databaseService.refreshTokens.findOne({ refresh_token })
+  }
+  async deleteRefreshToken(refresh_token: string) {
+    return await databaseService.refreshTokens.deleteOne({ refresh_token })
   }
 }
 

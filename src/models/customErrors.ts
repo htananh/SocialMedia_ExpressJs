@@ -1,6 +1,6 @@
 import HttpStatus from '~/constants/HttpStatus'
 
-type errorType = {
+export type errorType = {
   msg: string
   [key: string]: any
 }

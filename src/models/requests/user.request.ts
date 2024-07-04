@@ -8,3 +8,6 @@ export interface loginUser {
   email: string
   password: string
 }
+export interface logoutUser {
+  refreshToken: string
+}

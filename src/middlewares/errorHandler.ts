@@ -3,7 +3,7 @@ import { CustomError, ValidationEntiryError } from '../models/customErrors'
 
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ValidationEntiryError) {
-    console.log(err.errors)
+    console.log(err.message, err.errors)
     return res.status(err.status).json({ message: err.message, errors: err.errors })
   }
   if (err instanceof CustomError) {

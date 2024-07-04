@@ -31,3 +31,14 @@ export const generateRefreshToken = (payload: any) => {
     })
   })
 }
+export const verifyToken = (token: string, secret: string) => {
+  return new Promise<jwt.JwtPayload>((resolve, reject) => {
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(decoded as jwt.JwtPayload)
+      }
+    })
+  })
+}

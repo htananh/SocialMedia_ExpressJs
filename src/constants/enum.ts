@@ -11,3 +11,7 @@ interface Media {
   url: string
   type: string // video, image
 }
+enum TweetAudience {
+  Everyone, // 0
+  TwitterCircle // 1
+}

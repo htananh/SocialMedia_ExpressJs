@@ -7,3 +7,7 @@ export enum Token_Type {
   ACCESS_TOKEN,
   REFRESH_TOKEN
 }
+interface Media {
+  url: string
+  type: string // video, image
+}

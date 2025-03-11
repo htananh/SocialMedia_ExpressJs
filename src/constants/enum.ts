@@ -7,3 +7,11 @@ export enum Token_Type {
   ACCESS_TOKEN,
   REFRESH_TOKEN
 }
+interface Media {
+  url: string
+  type: string // video, image
+}
+enum TweetAudience {
+  Everyone, // 0
+  TwitterCircle // 1
+}
